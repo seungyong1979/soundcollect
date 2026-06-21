@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seonamsa Temple Soundtrack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Noto+Sans+KR:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- 배경 오버레이 -->
+  <div class="bg-overlay" id="bgOverlay"></div>
+  <div class="bg-image" id="bgImage"></div>
+
+  <!-- 메인 컨테이너 -->
+  <main class="player-container">
+
+    <!-- 타이틀 영역 -->
+    <header class="title-area">
+      <h1 class="title-en">SEONAMSA<br>TEMPLE SOUNDTRACK</h1>
+      <p class="title-ko">선암사 사운드트랙</p>
+    </header>
+
+    <!-- 플레이어 카드 -->
+    <section class="player-card" aria-label="음악 플레이어">
+
+      <!-- 앨범 / 바이닐 영역 -->
+      <div class="artwork-section">
+        <button class="nav-btn prev-btn" id="prevTrack" aria-label="이전 트랙">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="artwork-wrapper">
+          <div class="album-art" id="albumArt">
+            <img src="images/cover_placeholder.jpg" alt="앨범 커버" id="albumImg" onerror="this.style.display='none'" />
+            <div class="album-fallback" id="albumFallback">
+              <i class="fas fa-music"></i>
+            </div>
+          </div>
+          <div class="vinyl" id="vinyl">
+            <div class="vinyl-center"></div>
+            <div class="vinyl-grooves"></div>
+          </div>
+        </div>
+
+        <button class="nav-btn next-btn" id="nextTrack" aria-label="다음 트랙">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- 메타 정보 -->
+      <div class="meta-row">
+        <div class="meta-left">
+          <span class="meta-label">재생 시간</span>
+          <span class="meta-value" id="totalDuration">0:00</span>
+        </div>
+        <div class="track-info-center">
+          <p class="track-title" id="trackTitle">트랙을 선택하세요</p>
+          <p class="track-artist" id="trackArtist">Seonamsa Temple</p>
+        </div>
+        <div class="meta-right">
+          <span class="meta-label">트랙</span>
+          <span class="meta-value" id="trackNumber">01 / 05</span>
+        </div>
+      </div>
+
+      <!-- 진행바 -->
+      <div class="progress-section">
+        <span class="time-current" id="timeCurrent">0:00</span>
+        <div class="progress-bar-wrap" id="progressWrap" role="slider" aria-label="재생 위치" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+            <div class="progress-thumb" id="progressThumb"></div>
+          </div>
+        </div>
+        <span class="time-total" id="timeTotal">0:00</span>
+      </div>
+
+      <!-- 컨트롤 -->
+      <div class="controls-section">
+        <button class="ctrl-btn ctrl-sm" id="shuffleBtn" aria-label="셔플" title="셔플">
+          <i class="fas fa-random"></i>
+        </button>
+        <button class="ctrl-btn ctrl-md" id="prevBtn" aria-label="이전" title="이전">
+          <i class="fas fa-step-backward"></i>
+        </button>
+        <button class="ctrl-btn ctrl-lg play-pause-btn" id="playPauseBtn" aria-label="재생/일시정지">
+          <i class="fas fa-play" id="playIcon"></i>
+        </button>
+        <button class="ctrl-btn ctrl-md" id="nextBtn" aria-label="다음" title="다음">
+          <i class="fas fa-step-forward"></i>
+        </button>
+        <button class="ctrl-btn ctrl-sm" id="repeatBtn" aria-label="반복" title="반복">
+          <i class="fas fa-redo-alt"></i>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- 트랙 리스트 -->
+    <section class="tracklist-section" aria-label="트랙 목록">
+      <div class="tracklist-header">
+        <i class="fas fa-list-ul"></i>
+        <span>TRACK LIST</span>
+      </div>
+      <ul class="tracklist" id="tracklist" role="list">
+        <!-- JS로 동적 생성 -->
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- hidden audio -->
+  <audio id="audioPlayer" preload="metadata"></audio>
+
+  <script src="js/player.js"></script>
+</body>
+</html>
