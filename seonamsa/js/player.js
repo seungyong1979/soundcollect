@@ -11,12 +11,12 @@
 const TRACKS = [
   {
     id: 1,
-    title: '비온 뒤 개울가',
+    title: '비온 뒤 반딧불 새벽 일주문',
     artist: 'Seonamsa Temple',
-    subtitle: '선암사 개울가',
+    subtitle: '새벽 일주문 앞',
     src: '/seonamsa/audio/track01.mp3',
     cover: '/seonamsa/images/cover01.jpg',
-    desc: '비가 갠 뒤 선암사 개울가에 흐르는 물소리. 빗물이 바위를 타고 흘러내리며 산사의 적막을 채웁니다.',
+    desc: '비가 갠 새벽, 선암사 일주문 앞으로 반딧불이 날아다닙니다. 촉촉한 공기 속에 깜박이는 작은 빛들이 산사의 새벽을 밝힙니다.',
   },
   {
     id: 2,
