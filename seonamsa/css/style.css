@@ -141,7 +141,8 @@ body {
   font-weight: 400;
   opacity: 0.88;
 }
-.unesco-badge::before {
+.unesco-badge::before,
+.unesco-badge::after {
   content: '';
   width: 14px;
   height: 14px;
