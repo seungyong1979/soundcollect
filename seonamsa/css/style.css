@@ -6,22 +6,8 @@
 /* ── Google Fonts (추가: Nanum Myeongjo 한글 세리프) ── */
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+KR:wght@300;400;500&family=Inter:wght@300;400;500&display=swap');
 
-/* ── RESET ── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  width: 100%;
-  min-height: 100vh;
-  font-family: 'Noto Sans KR', 'Inter', sans-serif;
-  overflow-x: hidden;
-}
-
 /* ══════════════════════════════════════════
-   CSS 변수 — 선암사 팔레트
+   CSS 변수 — 선암사 팔레트 (반드시 최상단)
 ══════════════════════════════════════════ */
 :root {
   --green-deep:    #1A4D3E;
@@ -44,19 +30,32 @@ html, body {
   --glass-hover:   rgba(26, 77, 62, 0.60);
 }
 
+/* ── RESET ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Noto Sans KR', 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
 /* ══════════════════════════════════════════
    배경 — 포레스트 그린 자연 그라디언트
 ══════════════════════════════════════════ */
 body {
-  background: var(--green-deep);
+  background: #1A4D3E;
 }
 
 .bg-image {
   position: fixed;
   inset: 0;
-  background:
-    url('../images/background.jpg') center center / cover no-repeat;
-  background-color: var(--green-deep);
+  background: url('../images/background.jpg') center center / cover no-repeat;
+  background-color: #1A4D3E;
   z-index: 0;
 }
 
