@@ -4,7 +4,7 @@
    =================================================== */
 
 /* ── Google Fonts (추가: Nanum Myeongjo 한글 세리프) ── */
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500&family=Inter:wght@300;400;500&display=swap');
 
 /* ══════════════════════════════════════════
    CSS 변수 — 선암사 팔레트 (반드시 최상단)
@@ -165,24 +165,24 @@ body {
 }
 
 .title-main {
-  font-family: 'Cinzel', serif;
+  font-family: 'Bebas Neue', sans-serif;
   font-style: normal;
-  font-weight: 700;
-  font-size: clamp(2.6rem, 8.5vw, 5.2rem);
+  font-weight: 400;
+  font-size: clamp(3.2rem, 10vw, 6.4rem);
   color: var(--beige-light);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   text-shadow: 0 2px 28px rgba(0,0,0,0.45), 0 0 60px rgba(195,160,90,0.15);
   line-height: 1;
 }
 
 .title-sub {
-  font-family: 'Cinzel', serif;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
-  font-weight: 400;
-  font-size: clamp(0.82rem, 2.6vw, 1.15rem);
+  font-weight: 600;
+  font-size: clamp(0.72rem, 2.2vw, 0.98rem);
   color: var(--gold-light);
-  letter-spacing: 0.42em;
+  letter-spacing: 0.45em;
   text-transform: uppercase;
   opacity: 0.88;
   line-height: 1.7;
@@ -827,8 +827,8 @@ body {
   .controls-section { gap: 12px; }
   .play-pause-btn { width: 52px; height: 52px; font-size: 1.15rem; }
   .ctrl-md { width: 36px; height: 36px; }
-  .title-main { font-size: clamp(2.2rem, 10vw, 3.4rem); letter-spacing: 0.18em; }
-  .title-sub  { font-size: clamp(0.75rem, 3vw, 1rem); letter-spacing: 0.28em; }
+  .title-main { font-size: clamp(2.6rem, 11vw, 4rem); letter-spacing: 0.2em; }
+  .title-sub  { font-size: clamp(0.65rem, 2.8vw, 0.88rem); letter-spacing: 0.35em; }
 }
 
 @media (max-width: 380px) {
