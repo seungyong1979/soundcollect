@@ -4,7 +4,7 @@
    =================================================== */
 
 /* ── Google Fonts (추가: Nanum Myeongjo 한글 세리프) ── */
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Sans+KR:wght@300;400;500&family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cormorant:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500&family=Inter:wght@300;400;500&display=swap');
 
 /* ══════════════════════════════════════════
    CSS 변수 — 선암사 팔레트 (반드시 최상단)
@@ -156,14 +156,36 @@ body {
 }
 
 .title-en {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-weight: 700;
-  font-size: clamp(2rem, 6.5vw, 4.2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  line-height: 1;
+}
+
+.title-main {
+  font-family: 'Cormorant Garamond', 'Cormorant', serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: clamp(2.8rem, 9vw, 5.6rem);
   color: var(--beige-light);
-  letter-spacing: 0.03em;
-  line-height: 1.1;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.35);
+  line-height: 1;
+}
+
+.title-sub {
+  font-family: 'Cormorant Garamond', 'Cormorant', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(0.88rem, 2.8vw, 1.35rem);
+  color: var(--gold-light);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  opacity: 0.9;
+  line-height: 1.6;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.3);
 }
 
 .title-divider {
@@ -804,7 +826,8 @@ body {
   .controls-section { gap: 12px; }
   .play-pause-btn { width: 52px; height: 52px; font-size: 1.15rem; }
   .ctrl-md { width: 36px; height: 36px; }
-  .title-en { font-size: clamp(1.7rem, 8vw, 2.8rem); }
+  .title-main { font-size: clamp(2.2rem, 10vw, 3.4rem); letter-spacing: 0.18em; }
+  .title-sub  { font-size: clamp(0.75rem, 3vw, 1rem); letter-spacing: 0.28em; }
 }
 
 @media (max-width: 380px) {
