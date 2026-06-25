@@ -10,6 +10,9 @@ GOLD_LT     = (226, 201, 138)
 BEIGE       = (237, 227, 216)
 BEIGE_DIM   = (200, 185, 168)
 WHITE       = (255, 255, 255)
+# 베이지 배경 팔레트
+BEIGE_BG    = (240, 232, 220)   # 카드 배경 (#F0E8DC)
+BEIGE_CARD  = (237, 227, 212)   # 약간 더 진한 베이지
 
 W, H = 1080, 1920
 
@@ -44,39 +47,40 @@ def round_rect_mask(size, r):
     d.rounded_rectangle([0, 0, size[0]-1, size[1]-1], radius=r, fill=255)
     return mask
 
-# ── 캔버스 ────────────────────────────────────────────
-img = Image.new("RGB", (W, H), GREEN_DEEP)
+# ── 캔버스 (베이지 배경) ──────────────────────────────
+img = Image.new("RGB", (W, H), BEIGE_BG)
 draw = ImageDraw.Draw(img, "RGBA")
 
-# ── 배경 그라디언트 효과 (세로 미묘한 변화) ──────────
+# ── 배경 그라디언트 효과 (베이지 세로 변화) ───────────
 for y in range(H):
     ratio = y / H
-    r = int(GREEN_DEEP[0] + (38 - GREEN_DEEP[0]) * ratio * 0.4)
-    g = int(GREEN_DEEP[1] + (95 - GREEN_DEEP[1]) * ratio * 0.3)
-    b = int(GREEN_DEEP[2] + (80 - GREEN_DEEP[2]) * ratio * 0.3)
+    # 상단 밝은 베이지 → 하단 약간 따뜻한 베이지
+    r = int(BEIGE_BG[0] - (BEIGE_BG[0] - 228) * ratio * 0.25)
+    g = int(BEIGE_BG[1] - (BEIGE_BG[1] - 218) * ratio * 0.25)
+    b = int(BEIGE_BG[2] - (BEIGE_BG[2] - 202) * ratio * 0.30)
     draw.line([(0, y), (W, y)], fill=(r, g, b))
 
 draw = ImageDraw.Draw(img, "RGBA")
 
-# ── 배경 원형 장식 (반투명 골드) ──────────────────────
+# ── 배경 원형 장식 (반투명 그린) ──────────────────────
 def draw_circle_overlay(cx, cy, r, alpha=13):
     overlay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     od = ImageDraw.Draw(overlay)
-    od.ellipse([cx-r, cy-r, cx+r, cy+r], fill=(*GOLD, alpha))
+    od.ellipse([cx-r, cy-r, cx+r, cy+r], fill=(*GREEN_DEEP, alpha))
     base = img.convert("RGBA")
     merged = Image.alpha_composite(base, overlay)
     img.paste(merged.convert("RGB"))
 
-draw_circle_overlay(W + 100, -100, 380, 15)
-draw_circle_overlay(-60, H + 80, 260, 10)
-draw_circle_overlay(W - 60, H - 300, 160, 8)
-draw_circle_overlay(W // 2, H // 2, 500, 4)
+draw_circle_overlay(W + 100, -100, 380, 18)
+draw_circle_overlay(-60, H + 80, 260, 12)
+draw_circle_overlay(W - 60, H - 300, 160, 10)
+draw_circle_overlay(W // 2, H // 2, 500, 5)
 
 draw = ImageDraw.Draw(img, "RGBA")
 
 # ── 단청 장식 바 ──────────────────────────────────────
 def draw_dbar(y_top, bar_h=16):
-    colors = [GOLD, GREEN_MID, BEIGE, GREEN_MID, GOLD_LT, GREEN_LIGHT]
+    colors = [GREEN_DEEP, GOLD, GREEN_MID, GOLD_LT, GREEN_DEEP, GREEN_MID]
     seg = 18
     x = 0
     ci = 0
@@ -109,17 +113,17 @@ img.paste(disc, (DISC_X, DISC_Y), disc)
 # ── 타이틀 ────────────────────────────────────────────
 TX = COVER_X + COVER_S + 36
 f_main = fnt(FONT_MJ_B, 80)
-draw.text((TX, 54), "SEONAMSA", font=f_main, fill=BEIGE)
+draw.text((TX, 54), "SEONAMSA", font=f_main, fill=GREEN_DEEP)
 f_sub = fnt(FONT_KO_L, 22)
-draw.text((TX, 148), "TEMPLE  SOUNDSCAPE", font=f_sub, fill=GOLD_LT)
+draw.text((TX, 148), "TEMPLE  SOUNDSCAPE", font=f_sub, fill=(138, 107, 58))
 f_ko_sm = fnt(FONT_MJ, 23)
-draw.text((TX, 180), "선암사 사운드스케이프", font=f_ko_sm, fill=(*BEIGE_DIM, 190))
+draw.text((TX, 180), "선암사 사운드스케이프", font=f_ko_sm, fill=(90, 66, 48, 200))
 
 # ── NFC 마크 (우상단) ─────────────────────────────────
 NFC_CX, NFC_CY = W - 88, 100
 NFC_R = 44
 draw.ellipse([NFC_CX - NFC_R, NFC_CY - NFC_R, NFC_CX + NFC_R, NFC_CY + NFC_R],
-             outline=GOLD, width=3)
+             outline=GREEN_DEEP, width=3)
 
 def draw_nfc_waves_v2(cx, cy, col, aw=3):
     # 아래 점
@@ -130,23 +134,23 @@ def draw_nfc_waves_v2(cx, cy, col, aw=3):
         draw.arc([cx - rr, y0, cx + rr, y0 + rr * 2 - 8],
                  start=220, end=320, fill=col, width=lw)
 
-draw_nfc_waves_v2(NFC_CX, NFC_CY - 8, GOLD)
+draw_nfc_waves_v2(NFC_CX, NFC_CY - 8, GREEN_DEEP)
 f_nfc = fnt(FONT_KO_B, 18)
 draw.text((NFC_CX, NFC_CY + NFC_R + 10), "NFC",
-          font=f_nfc, fill=GOLD_LT, anchor="mm")
+          font=f_nfc, fill=GREEN_DEEP, anchor="mm")
 
 # ── 구분선 "사용법 / How to Use" ──────────────────────
 SEC_Y = 296
 f_sec_ko = fnt(FONT_KO_EB, 32)
 f_sec_en = fnt(FONT_KO_L, 22)
-draw.text((80, SEC_Y), "사용법", font=f_sec_ko, fill=GOLD_LT)
+draw.text((80, SEC_Y), "사용법", font=f_sec_ko, fill=GREEN_DEEP)
 sec_ko_w = int(draw.textlength("사용법", font=f_sec_ko))
 draw.text((80 + sec_ko_w + 24, SEC_Y + 4), "How to Use",
-          font=f_sec_en, fill=(*GOLD_LT, 160))
+          font=f_sec_en, fill=(*GREEN_MID, 200))
 sec_en_w = int(draw.textlength("How to Use", font=f_sec_en))
 LINE_SX = 80 + sec_ko_w + 24 + sec_en_w + 24
 draw.line([(LINE_SX, SEC_Y + 19), (W - 80, SEC_Y + 19)],
-          fill=(*GOLD, 90), width=1)
+          fill=(*GREEN_DEEP, 80), width=1)
 
 # ════════════════════════════════════════════════════
 # ── 아이콘 그리기 함수들 ──────────────────────────────
@@ -296,14 +300,14 @@ for i, (ko, en, note) in enumerate(steps):
     sh  = step_heights[i]
     mid_y = sy + sh // 2
 
-    # ── 번호 원 (골드) ──
+    # ── 번호 원 (딥그린) ──
     draw.ellipse([PAD_L, mid_y - SNUM_R,
                   PAD_L + SNUM_R * 2, mid_y + SNUM_R],
-                 fill=GOLD)
+                 fill=GREEN_DEEP)
     draw.text((PAD_L + SNUM_R, mid_y), str(i + 1),
-              font=f_snum, fill=GREEN_DEEP, anchor="mm")
+              font=f_snum, fill=BEIGE_BG, anchor="mm")
 
-    # ── 일러스트 박스 (반투명 녹색 패널) ──
+    # ── 일러스트 박스 (반투명 그린 패널) ──
     IL_X = PAD_L + SNUM_R * 2 + 26
     IL_Y = mid_y - ILLUST_S // 2
     # 박스 배경
@@ -311,15 +315,15 @@ for i, (ko, en, note) in enumerate(steps):
     od2 = ImageDraw.Draw(overlay2)
     od2.rounded_rectangle([IL_X, IL_Y, IL_X + ILLUST_S, IL_Y + ILLUST_S],
                            radius=14,
-                           fill=(*GREEN_LIGHT, 55),
-                           outline=(*GOLD, 80), width=2)
+                           fill=(*GREEN_DEEP, 18),
+                           outline=(*GREEN_DEEP, 60), width=2)
     img.paste(Image.alpha_composite(img.convert("RGBA"), overlay2).convert("RGB"))
     draw = ImageDraw.Draw(img, "RGBA")
 
     # ── 아이콘 그리기 ──
     icon_cx = IL_X + ILLUST_S // 2
     icon_cy = mid_y
-    ICON_FUNCS[i](icon_cx, icon_cy, ILLUST_S, GOLD_LT)
+    ICON_FUNCS[i](icon_cx, icon_cy, ILLUST_S, GREEN_DEEP)
 
     # ── 텍스트 ──
     TX2 = IL_X + ILLUST_S + 30
@@ -328,18 +332,18 @@ for i, (ko, en, note) in enumerate(steps):
     else:
         text_mid = mid_y - 10
 
-    draw.text((TX2, text_mid - 26), ko,  font=f_sko,  fill=BEIGE)
-    draw.text((TX2, text_mid + 28), en,  font=f_sen,  fill=BEIGE_DIM)
+    draw.text((TX2, text_mid - 26), ko,  font=f_sko,  fill=GREEN_DEEP)
+    draw.text((TX2, text_mid + 28), en,  font=f_sen,  fill=(45, 90, 72))
     if note:
         f_note_use = fnt(FONT_MJ, 24)
         draw.text((TX2, text_mid + 70), note,
-                  font=f_note_use, fill=(*GOLD_LT, 220))
+                  font=f_note_use, fill=(122, 90, 32, 230))
 
     # ── 구분선 ──
     if i < 3:
         line_y = sy + sh - 2
         draw.line([(PAD_L, line_y), (W - PAD_L, line_y)],
-                  fill=(*GOLD, 40), width=1)
+                  fill=(*GREEN_DEEP, 35), width=1)
 
     sy += sh
 
@@ -347,7 +351,7 @@ for i, (ko, en, note) in enumerate(steps):
 # ── 푸터 ────────────────────────────────────────────
 # ════════════════════════════════════════════════════
 FOOTER_TOP = sy + 28
-draw.line([(72, FOOTER_TOP), (W - 72, FOOTER_TOP)], fill=(*GOLD, 80), width=1)
+draw.line([(72, FOOTER_TOP), (W - 72, FOOTER_TOP)], fill=(*GREEN_DEEP, 60), width=1)
 
 # UNESCO pill
 UB_Y = FOOTER_TOP + 28
@@ -357,9 +361,9 @@ ub_w     = int(draw.textlength(ub_text, font=f_ubadge)) + 64
 ub_h     = 52
 draw.rounded_rectangle([72, UB_Y, 72 + ub_w, UB_Y + ub_h],
                         radius=ub_h // 2,
-                        outline=GOLD, width=2)
+                        outline=GREEN_DEEP, width=2)
 draw.text((72 + ub_w // 2, UB_Y + ub_h // 2), ub_text,
-          font=f_ubadge, fill=GOLD_LT, anchor="mm")
+          font=f_ubadge, fill=GREEN_DEEP, anchor="mm")
 
 # 기관명 pill 3개
 f_org = fnt(FONT_KO_R, 21)
@@ -371,9 +375,9 @@ for org in orgs:
     oh = 46
     draw.rounded_rectangle([ox, oy, ox + ow, oy + oh],
                             radius=oh // 2,
-                            outline=(*GOLD, 110), width=1)
+                            outline=(*GREEN_DEEP, 90), width=1)
     draw.text((ox + ow // 2, oy + oh // 2), org,
-              font=f_org, fill=BEIGE_DIM, anchor="mm")
+              font=f_org, fill=(45, 75, 60), anchor="mm")
     ox += ow + 16
 
 # 카피라이트
@@ -381,7 +385,7 @@ f_copy = fnt(FONT_KO_L, 17)
 copy_y = oy + 62
 draw.text((72, copy_y),
           "© 2026 SIMDA. All rights reserved.",
-          font=f_copy, fill=(*BEIGE_DIM, 100))
+          font=f_copy, fill=(*GREEN_DEEP, 90))
 
 # ── 저장 ─────────────────────────────────────────────
 out = "seonamsa/nfc-guide-mobile.png"
