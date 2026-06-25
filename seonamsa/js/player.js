@@ -129,11 +129,10 @@ function loadTrack(index, autoPlay = false) {
     }, 300);
   }
 
-  // 앨범 커버
-  albumImg.src = track.cover;
+  // 앨범 커버 — 항상 CD 커버 이미지 고정 (트랙마다 바뀌지 않음)
+  albumImg.src = '/seonamsa/images/cd_cover.jpg';
   albumImg.style.display = 'block';
-  albumFallback.style.display = 'flex';
-  albumImg.onload  = () => { albumFallback.style.display = 'none'; };
+  albumFallback.style.display = 'none';
   albumImg.onerror = () => { albumImg.style.display = 'none'; albumFallback.style.display = 'flex'; };
 
   // 진행바 리셋

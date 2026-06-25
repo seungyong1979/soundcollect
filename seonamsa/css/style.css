@@ -259,7 +259,7 @@ body {
   box-shadow:
     0 8px 32px rgba(0,0,0,0.5),
     0 2px 8px rgba(0,0,0,0.3);
-  background: var(--green-deep);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
