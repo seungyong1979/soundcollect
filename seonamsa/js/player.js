@@ -1,87 +1,96 @@
 /* ============================================================
-   선삼사 사운드트랙 - Music Player
+   선암사 사운드트랙 — Player v2
+   컨셉: 유네스코 세계유산 선암사 자연 소리
    ============================================================ */
 
 'use strict';
 
 // ──────────────────────────────────────────────
-// 🎵 트랙 데이터 (mp3 파일 업로드 후 여기를 수정하세요)
+// 🎵 트랙 데이터
 // ──────────────────────────────────────────────
 const TRACKS = [
   {
     id: 1,
-    title: 'Track 01',
+    title: '새벽 종소리',
     artist: 'Seonamsa Temple',
+    subtitle: '새벽의 고요함',
     src: 'audio/track01.mp3',
     cover: 'images/cover01.jpg',
+    desc: '이른 새벽, 선암사 종루에서 울려 퍼지는 은은한 종소리가 고요한 산사의 공기를 가득 채웁니다.',
   },
   {
     id: 2,
-    title: 'Track 02',
+    title: '계곡 물소리',
     artist: 'Seonamsa Temple',
+    subtitle: '승선교 아래',
     src: 'audio/track02.mp3',
     cover: 'images/cover02.jpg',
+    desc: '승선교 아래로 흐르는 계곡물 소리. 바위를 타고 흐르는 맑은 물소리가 마음을 씻어줍니다.',
   },
   {
     id: 3,
-    title: 'Track 03',
+    title: '숲속 새소리',
     artist: 'Seonamsa Temple',
+    subtitle: '산사의 여름',
     src: 'audio/track03.mp3',
     cover: 'images/cover03.jpg',
+    desc: '울창한 삼나무 숲 사이로 들려오는 새소리. 선암사의 여름 숲이 노래합니다.',
   },
   {
     id: 4,
-    title: 'Track 04',
+    title: '빗소리와 처마',
     artist: 'Seonamsa Temple',
+    subtitle: '여름 소나기',
     src: 'audio/track04.mp3',
     cover: 'images/cover04.jpg',
+    desc: '처마 끝에서 떨어지는 빗방울 소리. 선암사 고목 사이를 적시는 여름 소나기의 정취.',
   },
   {
     id: 5,
-    title: 'Track 05',
+    title: '풀벌레 소리',
     artist: 'Seonamsa Temple',
+    subtitle: '여름밤 선암사',
     src: 'audio/track05.mp3',
     cover: 'images/cover05.jpg',
+    desc: '해가 지고 나면 선암사 마당에 풀벌레 소리가 가득합니다. 여름밤의 고요하고 풍성한 자연 소리.',
   },
 ];
 
 // ──────────────────────────────────────────────
 // DOM 참조
 // ──────────────────────────────────────────────
-const audio          = document.getElementById('audioPlayer');
-const playPauseBtn   = document.getElementById('playPauseBtn');
-const playIcon       = document.getElementById('playIcon');
-const prevBtn        = document.getElementById('prevBtn');
-const nextBtn        = document.getElementById('nextBtn');
-const prevTrack      = document.getElementById('prevTrack');
-const nextTrack      = document.getElementById('nextTrack');
-const shuffleBtn     = document.getElementById('shuffleBtn');
-const repeatBtn      = document.getElementById('repeatBtn');
-const progressWrap   = document.getElementById('progressWrap');
-const progressFill   = document.getElementById('progressFill');
-const progressThumb  = document.getElementById('progressThumb');
-const timeCurrent    = document.getElementById('timeCurrent');
-const timeTotal      = document.getElementById('timeTotal');
-const totalDuration  = document.getElementById('totalDuration');
-const trackTitle     = document.getElementById('trackTitle');
-const trackArtist    = document.getElementById('trackArtist');
-const trackNumber    = document.getElementById('trackNumber');
-const albumImg       = document.getElementById('albumImg');
-const albumFallback  = document.getElementById('albumFallback');
-const vinyl          = document.getElementById('vinyl');
-const tracklistEl    = document.getElementById('tracklist');
+const audio         = document.getElementById('audioPlayer');
+const playPauseBtn  = document.getElementById('playPauseBtn');
+const playIcon      = document.getElementById('playIcon');
+const prevBtn       = document.getElementById('prevBtn');
+const nextBtn       = document.getElementById('nextBtn');
+const prevTrack     = document.getElementById('prevTrack');
+const nextTrack     = document.getElementById('nextTrack');
+const shuffleBtn    = document.getElementById('shuffleBtn');
+const repeatBtn     = document.getElementById('repeatBtn');
+const progressWrap  = document.getElementById('progressWrap');
+const progressFill  = document.getElementById('progressFill');
+const progressThumb = document.getElementById('progressThumb');
+const timeCurrent   = document.getElementById('timeCurrent');
+const timeTotal     = document.getElementById('timeTotal');
+const totalDuration = document.getElementById('totalDuration');
+const trackTitle    = document.getElementById('trackTitle');
+const trackArtist   = document.getElementById('trackArtist');
+const trackNumber   = document.getElementById('trackNumber');
+const albumImg      = document.getElementById('albumImg');
+const albumFallback = document.getElementById('albumFallback');
+const vinyl         = document.getElementById('vinyl');
+const tracklistEl   = document.getElementById('tracklist');
+const soundDesc     = document.getElementById('soundDesc');
 
 // ──────────────────────────────────────────────
 // 상태
 // ──────────────────────────────────────────────
-let currentIndex  = 0;
-let isPlaying     = false;
-let isShuffle     = false;
-let repeatMode    = 0; // 0=off 1=all 2=one
-let isDragging    = false;
-let vinylAngle    = 0;
-let vinylRAF      = null;
-let lastTimestamp  = null;
+let currentIndex = 0;
+let isPlaying    = false;
+let isShuffle    = false;
+let repeatMode   = 0; // 0=off 1=all 2=one
+let isDragging   = false;
 
 // ──────────────────────────────────────────────
 // 유틸리티
@@ -102,36 +111,41 @@ function loadTrack(index, autoPlay = false) {
   const track = TRACKS[index];
   currentIndex = index;
 
-  // 오디오 소스
   audio.src = track.src;
   audio.load();
 
-  // 메타 UI 업데이트
+  // UI 업데이트
   trackTitle.textContent  = track.title;
   trackArtist.textContent = track.artist;
   trackNumber.textContent = `${pad2(index + 1)} / ${pad2(TRACKS.length)}`;
+
+  // 사운드 설명 업데이트
+  if (soundDesc) {
+    soundDesc.style.opacity = '0';
+    soundDesc.style.transition = 'opacity 0.4s ease';
+    setTimeout(() => {
+      soundDesc.textContent = track.desc;
+      soundDesc.style.opacity = '1';
+    }, 300);
+  }
 
   // 앨범 커버
   albumImg.src = track.cover;
   albumImg.style.display = 'block';
   albumFallback.style.display = 'flex';
-  albumImg.onload = () => { albumFallback.style.display = 'none'; };
+  albumImg.onload  = () => { albumFallback.style.display = 'none'; };
   albumImg.onerror = () => { albumImg.style.display = 'none'; albumFallback.style.display = 'flex'; };
 
   // 진행바 리셋
   updateProgress(0, 0);
-  timeCurrent.textContent = '0:00';
-  timeTotal.textContent   = '0:00';
+  timeCurrent.textContent   = '0:00';
+  timeTotal.textContent     = '0:00';
   totalDuration.textContent = '0:00';
 
-  // 트랙리스트 하이라이트
   renderTracklist();
 
-  if (autoPlay) {
-    playAudio();
-  } else {
-    pauseAudio();
-  }
+  if (autoPlay) playAudio();
+  else pauseAudio();
 }
 
 // ──────────────────────────────────────────────
@@ -143,7 +157,7 @@ function playAudio() {
     promise.then(() => {
       isPlaying = true;
       playIcon.className = 'fas fa-pause';
-      startVinylSpin();
+      vinyl.classList.add('spinning');
     }).catch(() => {
       // autoplay blocked
     });
@@ -154,24 +168,13 @@ function pauseAudio() {
   audio.pause();
   isPlaying = false;
   playIcon.className = 'fas fa-play';
-  stopVinylSpin();
+  vinyl.classList.remove('spinning');
 }
 
 function togglePlay() {
   if (audio.src && audio.src !== window.location.href) {
     if (isPlaying) pauseAudio(); else playAudio();
   }
-}
-
-// ──────────────────────────────────────────────
-// 바이닐 회전 애니메이션
-// ──────────────────────────────────────────────
-function startVinylSpin() {
-  vinyl.classList.add('spinning');
-}
-
-function stopVinylSpin() {
-  vinyl.classList.remove('spinning');
 }
 
 // ──────────────────────────────────────────────
@@ -198,17 +201,15 @@ function goPrev() {
 }
 
 // ──────────────────────────────────────────────
-// 진행바 업데이트
+// 진행바
 // ──────────────────────────────────────────────
 function updateProgress(current, duration) {
   const pct = duration > 0 ? (current / duration) * 100 : 0;
   progressFill.style.width = `${pct}%`;
   progressThumb.style.left = `${pct}%`;
+  if (progressWrap) progressWrap.setAttribute('aria-valuenow', Math.round(pct));
 }
 
-// ──────────────────────────────────────────────
-// 진행바 클릭 / 드래그
-// ──────────────────────────────────────────────
 function seekFromEvent(e) {
   const rect = progressWrap.getBoundingClientRect();
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -219,25 +220,11 @@ function seekFromEvent(e) {
   updateProgress(ratio * (audio.duration || 0), audio.duration || 0);
 }
 
-progressWrap.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  seekFromEvent(e);
-});
-
-progressWrap.addEventListener('touchstart', (e) => {
-  isDragging = true;
-  seekFromEvent(e);
-}, { passive: true });
-
-document.addEventListener('mousemove', (e) => {
-  if (isDragging) seekFromEvent(e);
-});
-
-document.addEventListener('touchmove', (e) => {
-  if (isDragging) seekFromEvent(e);
-}, { passive: true });
-
-document.addEventListener('mouseup', () => { isDragging = false; });
+progressWrap.addEventListener('mousedown', (e) => { isDragging = true; seekFromEvent(e); });
+progressWrap.addEventListener('touchstart', (e) => { isDragging = true; seekFromEvent(e); }, { passive: true });
+document.addEventListener('mousemove', (e) => { if (isDragging) seekFromEvent(e); });
+document.addEventListener('touchmove', (e) => { if (isDragging) seekFromEvent(e); }, { passive: true });
+document.addEventListener('mouseup',  () => { isDragging = false; });
 document.addEventListener('touchend', () => { isDragging = false; });
 
 // ──────────────────────────────────────────────
@@ -257,7 +244,6 @@ audio.addEventListener('loadedmetadata', () => {
 
 audio.addEventListener('ended', () => {
   if (repeatMode === 2) {
-    // 한 곡 반복
     audio.currentTime = 0;
     playAudio();
   } else {
@@ -265,10 +251,7 @@ audio.addEventListener('ended', () => {
   }
 });
 
-audio.addEventListener('error', () => {
-  pauseAudio();
-  // 파일 없을 때 UI만 리셋
-});
+audio.addEventListener('error', () => { pauseAudio(); });
 
 // ──────────────────────────────────────────────
 // 트랙리스트 렌더
@@ -281,21 +264,21 @@ function renderTracklist() {
     li.className = 'track-item' + (i === currentIndex ? ' playing' : '');
     li.setAttribute('role', 'listitem');
     li.setAttribute('tabindex', '0');
-    li.setAttribute('aria-label', `${track.title} - ${track.artist}`);
+    li.setAttribute('aria-label', `${track.title} — ${track.artist}`);
 
     li.innerHTML = `
       <div class="track-num">
         <span class="num-label">${pad2(i + 1)}</span>
-        <div class="playing-indicator">
+        <div class="playing-indicator" aria-hidden="true">
           <span></span><span></span><span></span>
         </div>
       </div>
-      <div class="track-cover-thumb" data-thumb="${i}">
-        <img src="${track.cover}" alt="${track.title} 커버" class="thumb-img" data-thumb-img="${i}" />
+      <div class="track-cover-thumb">
+        <img src="${track.cover}" alt="${track.title} 커버" class="thumb-img" />
       </div>
       <div class="track-details">
         <p class="track-name">${track.title}</p>
-        <p class="track-meta">${track.artist}</p>
+        <p class="track-meta">${track.subtitle || track.artist}</p>
       </div>
       <span class="track-duration" data-idx="${i}">--:--</span>
     `;
@@ -308,29 +291,28 @@ function renderTracklist() {
     tracklistEl.appendChild(li);
   });
 
-  // 재생 중 표시 - num-label 숨기고 equalizer 보이기
+  // 현재 트랙 이퀄라이저 표시
   const items = tracklistEl.querySelectorAll('.track-item');
   items.forEach((item, i) => {
-    const numLabel = item.querySelector('.num-label');
+    const numLabel  = item.querySelector('.num-label');
     const indicator = item.querySelector('.playing-indicator');
     if (i === currentIndex) {
-      numLabel.style.display = 'none';
+      numLabel.style.display  = 'none';
       indicator.style.display = 'flex';
     } else {
-      numLabel.style.display = 'block';
+      numLabel.style.display  = 'block';
       indicator.style.display = 'none';
     }
   });
 
-  // 썸네일 이미지 에러 처리
+  // 썸네일 에러 처리
   tracklistEl.querySelectorAll('.thumb-img').forEach(img => {
-    img.addEventListener('error', function() {
-      const wrapper = this.closest('[data-thumb]');
-      if (wrapper) wrapper.innerHTML = '<span style="font-size:1.1rem;color:rgba(255,255,255,0.5)">♪</span>';
+    img.addEventListener('error', function () {
+      const wrapper = this.closest('.track-cover-thumb');
+      if (wrapper) wrapper.innerHTML = '<i class="fas fa-leaf" style="color:var(--gold);font-size:1rem"></i>';
     });
   });
 
-  // 오프스크린 트랙 길이 읽기
   loadTrackDurations();
 }
 
@@ -343,10 +325,8 @@ function loadTrackDurations() {
     tempAudio.src = track.src;
     tempAudio.preload = 'metadata';
     tempAudio.addEventListener('loadedmetadata', () => {
-      const durationEl = tracklistEl.querySelector(`[data-idx="${i}"]`);
-      if (durationEl) {
-        durationEl.textContent = formatTime(tempAudio.duration);
-      }
+      const el = tracklistEl.querySelector(`[data-idx="${i}"]`);
+      if (el) el.textContent = formatTime(tempAudio.duration);
     });
   });
 }
@@ -357,6 +337,7 @@ function loadTrackDurations() {
 function toggleShuffle() {
   isShuffle = !isShuffle;
   shuffleBtn.classList.toggle('active', isShuffle);
+  shuffleBtn.title = isShuffle ? '셔플 켜짐' : '셔플';
 }
 
 function toggleRepeat() {
@@ -369,7 +350,7 @@ function toggleRepeat() {
     repeatBtn.innerHTML = '<i class="fas fa-redo-alt"></i>';
     repeatBtn.title = '전체 반복';
   } else {
-    repeatBtn.innerHTML = '<i class="fas fa-redo-alt"></i><sup style="font-size:0.55rem;position:relative;top:-4px;left:-2px;color:#90d4ff">1</sup>';
+    repeatBtn.innerHTML = '<i class="fas fa-redo-alt"></i><sup style="font-size:0.5rem;position:relative;top:-5px;left:-2px;color:var(--gold)">1</sup>';
     repeatBtn.title = '한 곡 반복';
   }
 }
@@ -410,7 +391,6 @@ document.addEventListener('keydown', (e) => {
 // ──────────────────────────────────────────────
 function init() {
   renderTracklist();
-  // 첫 트랙 로드 (자동재생 안 함)
   loadTrack(0, false);
 }
 
