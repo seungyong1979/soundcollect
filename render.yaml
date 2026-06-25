@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: soundcollect
+    env: static
+    staticPublishPath: .
+    routes:
+      - type: redirect
+        source: /seonamsa
+        destination: /seonamsa/
+        permanent: true
