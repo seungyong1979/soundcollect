@@ -8,3 +8,7 @@ services:
         source: /seonamsa
         destination: /seonamsa/
         permanent: true
+      - type: redirect
+        source: /suncheonman
+        destination: /suncheonman/
+        permanent: true
